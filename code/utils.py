@@ -18,8 +18,9 @@ def read_tsp(path):
         if line.startswith('NODE_COORD_SECTION'):
             in_coords = True
             continue
+
         if in_coords:
-            if line == 'EOF' or line == '':  # 섹션 끝
+            if line == 'EOF' or line == '':
                 break
             # ex) "  1   37.619   55.755"
             parts = re.split(r'\s+', line)
