@@ -28,3 +28,32 @@ def read_tsp(path):
             x, y = float(parts[1]), float(parts[2])
             coords[idx] = (x, y)
     return coords
+
+
+class UnionFind:
+    
+    def __init__(self, n):
+        # 1-based indexing
+        self.parent = [-1] * (n + 1)
+
+    def find(self, x):
+        if self.parent[x] < 0:
+            return x
+        self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def merge(self, a, b):
+        ra = self.find(a)
+        rb = self.find(b)
+        if ra == rb:
+            return False
+
+        if self.parent[ra] > self.parent[rb]:
+            ra, rb = rb, ra
+
+        self.parent[ra] += self.parent[rb]
+        self.parent[rb] = ra
+        return True
+
+    def size(self, x):
+        return -self.parent[self.find(x)]
