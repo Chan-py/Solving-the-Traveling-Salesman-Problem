@@ -1,11 +1,9 @@
 import heapq
+from tqdm import tqdm
+import sys
+sys.setrecursionlimit(int(1e6))
 
-from utils import UnionFind
-
-def distance(a, b):
-    dx = a[0] - b[0]
-    dy = a[1] - b[1]
-    return (dx**2 + dy**2) ** 0.5
+from utils import UnionFind, distance
 
 def Kruskal(coords):
     nodes = list(coords.keys())
@@ -66,6 +64,45 @@ def Prim(coords):
 
     return graph
 
+def Prim_v2(coords):
+    nodes = list(coords.keys())
+    n = len(nodes)
+
+    key = [1e9] * (n + 1)
+    parent = {u: None for u in nodes}
+    visited = set()
+    
+    start = 1
+    key[start] = 0
+
+    for i in tqdm(range(n), desc="progress"):
+        u = None
+        min_key = 1e9
+        for v in nodes:
+            if v not in visited and key[v] < min_key:
+                min_key = key[v]
+                u = v
+        if u is None:
+            break
+        visited.add(u)
+
+        for v in nodes:
+            if v not in visited:
+                w = distance(coords[u], coords[v])
+                if w < key[v]:
+                    key[v] = w
+                    parent[v] = u
+
+    graph = [[] for _ in range(n + 1)]
+    for v in nodes:
+        u = parent[v]
+        if u is not None:
+            w = distance(coords[u], coords[v])
+            graph[u].append((v, w))
+            graph[v].append((u, w))
+
+    return graph
+
 
 def _preorder_traversal(tree, node, visited, tour):
     visited.add(node)
@@ -76,7 +113,8 @@ def _preorder_traversal(tree, node, visited, tour):
 
 def run(coords):
 
-    graph = Prim(coords)
+    graph = Prim_v2(coords)
+    # print(graph)
     
     start = 1
     tour = []

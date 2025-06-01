@@ -31,7 +31,7 @@ def read_tsp(path):
 
 
 class UnionFind:
-    
+
     def __init__(self, n):
         # 1-based indexing
         self.parent = [-1] * (n + 1)
@@ -57,3 +57,9 @@ class UnionFind:
 
     def size(self, x):
         return -self.parent[self.find(x)]
+    
+
+def distance(a, b):
+    dx = a[0] - b[0]
+    dy = a[1] - b[1]
+    return (dx**2 + dy**2) ** 0.5
