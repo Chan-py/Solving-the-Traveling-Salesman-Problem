@@ -1,6 +1,6 @@
 import random
 
-from utils import distance
+from utils import distance, plot_clusters
 import mst
 import dp
 
@@ -217,6 +217,8 @@ def compute_total_cost(coords, tour):
 def run(coords, K=10, max_iter=100):
     # 1. Cluster nodes
     clusters, centers = kmeans_plus_plus(coords, K, max_iter=max_iter)
+
+    plot_clusters(coords, clusters)
 
     # 2. Solve each cluster's TSP via MST-based 2-approx
     cluster_tours = get_cluster_internal_tours(clusters, coords)
